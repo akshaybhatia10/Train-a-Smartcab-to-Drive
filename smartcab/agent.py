@@ -23,7 +23,7 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Set any additional class parameters as needed
-
+        self.reward = 0
 
     def reset(self, destination=None, testing=False):
         """ The reset function is called at the beginning of each trial.
@@ -39,6 +39,7 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
+
         self.epsilon = self.epsilon - 0.05
         if testing == True:
             self.alpha = 0
@@ -60,7 +61,7 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Set 'state' as a tuple of relevant data for the agent        
-        state = (waypoint, inputs['light'], inputs['oncoming'], inputs['left'], inputs['right'])
+        state = (waypoint, inputs['light'], inputs['oncoming'], inputs['left'])
 
         return state
 
@@ -74,7 +75,6 @@ class LearningAgent(Agent):
         ###########
         # Calculate the maximum Q-value of all actions for a given state
 
-        maxQ = float('-inf')
         for key,value in self.Q[state].iteritems():
            return max(self.Q[state].values())
 
@@ -99,7 +99,7 @@ class LearningAgent(Agent):
         """ The choose_action function is called when the agent is asked to choose
             which action to take, based on the 'state' the smartcab is in. """
 
-        # Set the agent state and default action
+        # Set the age nt state and default action
         self.state = state
         self.next_waypoint = self.planner.next_waypoint()
         action = None
@@ -110,21 +110,17 @@ class LearningAgent(Agent):
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
-        waypoint = self.next_waypoint
-        import random  
-
         if not self.learning:
            action = random.choice(self.valid_actions)
         else:
            max = self.get_maxQ(state)
-           coin = random.random()
-           if coin <= self.epsilon:
+           if self.epsilon > random.random():
                  action = random.choice(self.valid_actions)
            else:
                best=[]
-               for act in self.valid_actions:
-                  if self.Q[state][act] == max:
-                      best.append(act)
+               for action in self.valid_actions:
+                  if self.Q[state][action] == max:
+                      best.append(action)
                action = random.choice(best)
         return action
 
