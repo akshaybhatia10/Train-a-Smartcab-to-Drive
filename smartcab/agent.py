@@ -110,6 +110,7 @@ class LearningAgent(Agent):
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
+        waypoint = self.next_waypoint
         if not self.learning:
            action = random.choice(self.valid_actions)
         else:
@@ -117,10 +118,10 @@ class LearningAgent(Agent):
            if self.epsilon > random.random():
                  action = random.choice(self.valid_actions)
            else:
-               best=[]
-               for action in self.valid_actions:
-                  if self.Q[state][action] == max:
-                      best.append(action)
+               best = []
+               for act in self.valid_actions:
+                  if self.Q[state][act] == max:
+                      best.append(act)
                action = random.choice(best)
         return action
 
